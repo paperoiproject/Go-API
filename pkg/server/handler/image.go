@@ -52,6 +52,22 @@ func GetHandleImageSee(writer http.ResponseWriter, request *http.Request) {
 	response.SuccessFile(writer, &img)
 }
 
+// GetHandleImageGet  /image/getのハンドラ(imageの返却)
+func GetHandleImageGet(writer http.ResponseWriter, request *http.Request) {
+	name := request.FormValue("name")
+	file, err := os.Open(fmt.Sprintf("./image/%s.jpg", name))
+	defer file.Close()
+	if err != nil {
+		log.Println(err)
+	}
+	img, _, err := image.Decode(file)
+	if err != nil {
+		log.Println(err)
+	}
+	log.Println("OK")
+	response.SuccessFile(writer, &img)
+}
+
 // PostHandleImageChange  /image/changeのハンドラ(imageの返却)
 func PostHandleImageChange(writer http.ResponseWriter, request *http.Request) {
 	name := request.FormValue("name")

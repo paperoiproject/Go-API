@@ -25,7 +25,7 @@ func init() {
 	// user:password@tcp(host:port)/database
 	var err error
 	DB, err = sql.Open(driverName,
-		fmt.Sprintf("root:%s@/papero", password))
+		fmt.Sprintf("root:%s@/papero", password)+"?parseTime=true&loc=Asia%2FTokyo")
 	if err != nil {
 		log.Fatal(err)
 	}

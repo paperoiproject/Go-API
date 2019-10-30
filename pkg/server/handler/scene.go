@@ -66,8 +66,6 @@ func PostHandleSceneAdd(writer http.ResponseWriter, request *http.Request) {
 		works[i] = work
 		texts[i] = text
 	}
-	log.Println(works)
-	log.Println(texts)
 	err = service.Service.SceneService.Add(FormName, FormNum, works, texts)
 	if err != nil {
 		log.Println(err)
@@ -95,4 +93,35 @@ func PostHandleSceneDelete(writer http.ResponseWriter, request *http.Request) {
 		response.BadRequest(writer, "予期しないエラー")
 	}
 	response.Success(writer, "OK")
+}
+
+// PostHandleSceneUpdate /scene/updateのハンドラ(シーンリストの変更)
+func PostHandleSceneUpdate(writer http.ResponseWriter, request *http.Request) {
+	FormNum, err := strconv.Atoi(request.FormValue("num"))
+	if err != nil {
+		log.Println(err)
+		response.BadRequest(writer, "不正な値")
+	}
+	FormName := request.FormValue("name")
+	var Tasks = make([]Task, FormNum, FormNum)
+	var works = make([]string, FormNum, FormNum)
+	var texts = make([]string, FormNum, FormNum)
+	for i := 0; i < FormNum; i++ {
+		work := request.FormValue(fmt.Sprintf("work%v", i+1))
+		text := request.FormValue(fmt.Sprintf("text%v", i+1))
+		Tasks[i] = Task{
+			Work: work,
+			Text: text,
+		}
+		works[i] = work
+		texts[i] = text
+	}
+
+	err = service.Service.SceneService.Update(FormName, FormNum, works, texts)
+
+	if err != nil {
+		log.Println(err)
+		response.BadRequest(writer, "予期しないエラー")
+	}
+	response.Success(writer, ResponseSceneAdd{Name: FormName, Tasks: Tasks})
 }

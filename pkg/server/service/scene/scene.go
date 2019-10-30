@@ -34,3 +34,13 @@ func (sceneService *SceneService) Delete(name string) error {
 	err := sceneService.SceneTable.Delete(name)
 	return err
 }
+
+// Update /scene/deleteのサービス
+func (sceneService *SceneService) Update(name string, num int, works []string, texts []string) error {
+	err := sceneService.SceneTable.Delete(name)
+	if err != nil {
+		return err
+	}
+	err = sceneService.SceneTable.BulkInsert(name, num, works, texts)
+	return err
+}
